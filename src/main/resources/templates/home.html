@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>Upload an image</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h1>Jigsaw</h1>
+    <p>Upload an image from which a jigsaw puzzle should be generated.</p>
+    <form action="upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file" /><br/>
+        <input type="submit" value="Upload" name="upload" id="upload" />
+    </form>
+</body>
+</html>
