@@ -1,16 +1,18 @@
 package za.co.bbd.gradprogram.jigsaw;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import za.co.bbd.gradprogram.jigsaw.TargetImage;
-import za.co.bbd.gradprogram.jigsaw.TargetImageJdbcRepository;
+import za.co.bbd.gradprogram.jigsaw.db.TargetImage;
+import za.co.bbd.gradprogram.jigsaw.db.TargetImageJdbcRepository;
 
 @SpringBootApplication
-public class App {
+public class App implements CommandLineRunner {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 

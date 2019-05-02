@@ -1,6 +1,6 @@
 create table targetImage
 (
    id integer not null,
-   bits bytes[] not null,
+   image bytes[] not null,
    primary key(id)
 );
