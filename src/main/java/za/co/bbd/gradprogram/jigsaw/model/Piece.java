@@ -1,7 +1,6 @@
 package za.co.bbd.gradprogram.jigsaw.model;
 
 import lombok.Data;
-import java.awt.image.BufferedImage;
 
 @Data
 public class Piece {
@@ -9,10 +8,9 @@ public class Piece {
     private final int initialColumn;
     private final String name;
 
-    public Piece (int row, int column, BufferedImage image) {
+    public Piece (int row, int column) {
         this.initialRow = row;
         this.initialColumn = column;
-        this.image = image;
         this.name = String.valueOf(this.initialRow) + String.valueOf(this.initialColumn);
     }
 
