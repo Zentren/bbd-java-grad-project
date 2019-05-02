@@ -1,7 +1,10 @@
 package za.co.bbd.gradprogram.jigsaw.model;
 
+import lombok.Getter;
+
 import java.util.Random;
 
+@Getter
 public class Board {
 
     private final int rows;
@@ -14,8 +17,9 @@ public class Board {
         this.columns = columns;
 
         this.board = new Piece[this.rows][this.columns];
-        shuffle();
+
         initialize();
+        shuffle();
     }
 
     public Piece getPiece(int row, int col) {
@@ -35,7 +39,7 @@ public class Board {
 
         for (int r = 0; r < this.rows; r++) {
             for (int c = 0; c < this.columns; c++) {
-                swap(r, c, rand.nextInt(this.rows), rand.nextInt(this.rows));
+                swap(r, c, rand.nextInt(this.rows), rand.nextInt(this.columns));
             }
         }
     }

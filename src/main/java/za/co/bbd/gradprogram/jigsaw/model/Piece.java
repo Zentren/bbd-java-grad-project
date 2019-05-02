@@ -6,14 +6,16 @@ import lombok.Data;
 public class Piece {
     private final int initialRow;
     private final int initialColumn;
+    private final String name;
+
+    public Piece (int row, int column) {
+        this.initialRow = row;
+        this.initialColumn = column;
+        this.name = String.valueOf(this.initialRow) + String.valueOf(this.initialColumn);
+    }
 
     public boolean inRightPlace(int row, int col) {
         return ((this.initialRow == row)&&(this.initialColumn == col));
-    }
-
-    //TODO: Change to bit stream or whatever
-    public String tileFace() {
-        return String.valueOf(this.initialRow) + String.valueOf(this.initialColumn);
     }
 
     @Override
