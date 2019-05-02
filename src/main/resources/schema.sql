@@ -1,6 +1,6 @@
 create table targetImage
 (
-   id integer not null,
-   image bytes[] not null,
+   id integer AUTO_INCREMENT,
+   image binary not null,
    primary key(id)
 );
