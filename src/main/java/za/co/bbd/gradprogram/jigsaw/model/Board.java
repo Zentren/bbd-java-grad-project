@@ -14,7 +14,12 @@ public class Board {
         this.columns = columns;
 
         this.board = new Piece[this.rows][this.columns];
+        shuffle();
         initialize();
+    }
+
+    public Piece getPiece(int row, int col) {
+        return board[row][col];
     }
 
     private void initialize() {
