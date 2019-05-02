@@ -14,6 +14,7 @@ public class Board {
         this.columns = columns;
 
         this.board = new Piece[this.rows][this.columns];
+        shuffle();
         initialize();
     }
 
