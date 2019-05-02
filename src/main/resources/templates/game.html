@@ -5,17 +5,66 @@
 <head>
     <title>Jigsaw</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script>
+        "use strict";
+        var lastButton = null;
+
+        function byId(e){return document.getElementById(e);}
+        function newEl(tag){return document.createElement(tag);}
+
+        window.addEventListener('load', onDocLoaded, false);
+
+        function onDocLoaded()
+        {
+            byId('goBtn').addEventListener('click', onGoBtnClicked, false);
+        }
+
+        function onCellClicked(evt)
+        {
+            if (lastButton == null) {
+                lastButton = this;
+            }
+            else {
+                var tmp = this.innerHTML;
+                this.innerHTML = lastButton.innerHTML
+                lastButton.innerHTML = tmp
+                lastButton = null;
+            }
+        }
+
+        function onGoBtnClicked(evt)
+        {
+            byId('tblTgt').innerHTML = '';
+            var nCols = byId('inputX').value;
+            var nRows = byId('inputY').value;
+
+            var tbl, curRow, curCell;
+            tbl = newEl('table');
+            var x, y;
+            for (y=0; y<nRows; y++)
+            {
+                curRow = newEl('tr');
+                tbl.appendChild(curRow);
+
+                for (x=0; x<nCols; x++)
+                {
+                    curCell = newEl('td');
+                    curCell.addEventListener('click', onCellClicked, false);
+                    curCell.innerText = "[" + x + "," + y + "]";
+                    curRow.appendChild(curCell);
+                }
+            }
+            byId('tblTgt').appendChild(tbl);
+        }
+    </script>
 </head>
 <body>
-<h1>Jigsaw</h1>
-<table class="table table-hover">
-    <tbody>
-    <tr th:each="column : ${board.getBoard()}">
-        <th:block th:each="row : ${column}">
-            <td th:text="${row.getName()}">Dataset Field</td>
-        </th:block>
-    </tr>
-    </tbody>
-</table>
+    <img th:src="@{'/images/' + ${id}}"/>
+    <h1>Jigsaw</h1>
+    nCols:<input type="text" name="enter" class="enter" value="" id="inputX"/><br>
+    nRows:<input type="text" name="enter" class="enter" value="" id="inputY"/><br>
+    <button id='goBtn'>click</button>
+    <hr>
+    <div id='tblTgt'></div>
 </body>
 </html>
