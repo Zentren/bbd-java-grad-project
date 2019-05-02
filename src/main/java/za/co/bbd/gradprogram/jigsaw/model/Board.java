@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.util.Random;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.awt.Graphics2D;
 
 @Getter
 public class Board {
@@ -78,9 +79,20 @@ public class Board {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 BufferedImage newChunk = new BufferedImage(chunkWidth, chunkHeight, targetImage.getType());
+                drawPieceImage(newChunk, chunkWidth, chunkHeight, i, j); // TODO Remove if image is not shown.
                 pieces.add(newChunk);
             }
         }
+    }
+
+    private void drawPieceImage(BufferedImage img, int chunkWidth, int chunkHeight, int x, int y) {
+        Graphics2D gr = img.createGraphics();
+        gr.drawImage(targetImage, 0, 0,
+                chunkWidth, chunkHeight,
+                chunkWidth * y, chunkHeight * x,
+                chunkWidth * y + chunkWidth, chunkHeight * x + chunkHeight,
+                null);
+        gr.dispose();
     }
 
 }
