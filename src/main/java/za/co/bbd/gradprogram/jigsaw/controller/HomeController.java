@@ -24,9 +24,11 @@ public class HomeController {
     }
 
     @PostMapping("/")
-    public String uploadFile(@RequestParam("file") MultipartFile file)throws IOException {
+    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("columns") int columns, @RequestParam("rows") int rows) throws IOException {
+        System.out.println(columns);
+        System.out.println(rows);
         long rowId = jdbcRepository.insert(new TargetImage(file.getBytes()));
-        int sessionId = SessionManager.getInstance().createSession((int) rowId, 3, 3).getSessionId();
+        int sessionId = SessionManager.getInstance().createSession((int) rowId, rows, columns).getSessionId();
         return "redirect:/game/" + sessionId;
     }
 }
