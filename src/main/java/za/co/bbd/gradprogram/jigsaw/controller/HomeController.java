@@ -24,7 +24,7 @@ public class HomeController {
 
     @PostMapping("/")
     public String uploadFile(@RequestParam("file") MultipartFile file)throws IOException {
-        int rowId = jdbcRepository.insert(new TargetImage(0L, file.getBytes()));
+        long rowId = jdbcRepository.insert(new TargetImage(0L, file.getBytes()));
         return "redirect:/game?id=" + rowId;
     }
 }

@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -37,9 +40,15 @@ public class TargetImageJdbcRepository {
         return jdbcTemplate.update("delete from targetImage where id=?", new Object[]{id});
     }
 
-    public int insert(TargetImage targetImage) {
-        return jdbcTemplate.update("insert into targetImage (image) " + "values(?)",
-                new Object[]{targetImage.getImage()});
+    public long insert(TargetImage targetImage) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement("insert into targetImage (image) " + "values(?)", new String[] {"id"});
+            ps.setBytes(1, new byte[] {});
+            return ps;
+        }, keyHolder);
+        return (long) keyHolder.getKey();
     }
 
     public int update(TargetImage targetImage) {
