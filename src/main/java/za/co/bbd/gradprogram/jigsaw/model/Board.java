@@ -3,9 +3,6 @@ package za.co.bbd.gradprogram.jigsaw.model;
 import lombok.Getter;
 
 import java.util.Random;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.awt.Graphics2D;
 
 @Getter
 public class Board {
@@ -13,15 +10,11 @@ public class Board {
     private final int rows;
     private final int columns;
 
-    private ArrayList<BufferedImage> pieces = new ArrayList<>();
-    private BufferedImage targetImage;
-
     private Piece[][] board;
 
-    public Board(int rows, int columns, BufferedImage targetImage) {
+    public Board(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        this.targetImage = targetImage;
 
         this.board = new Piece[this.rows][this.columns];
 
@@ -34,11 +27,9 @@ public class Board {
     }
 
     private void initialize() {
-        cutMyImageIntoPieces();
         for (int r = 0; r < this.rows; r++) {
             for (int c = 0; c < this.columns; c++) {
-                BufferedImage pieceImage = pieces.get(r + c);
-                this.board[r][c] = new Piece(r, c, pieceImage);
+                this.board[r][c] = new Piece(r, c);
             }
         }
     }
@@ -69,30 +60,6 @@ public class Board {
         Piece temp = board[row1][col1];
         board[row1][col1] = board[row2][col2];
         board[row2][col2] = temp;
-    }
-
-
-    private void cutMyImageIntoPieces() {
-        int chunkWidth = targetImage.getWidth() / columns;
-        int chunkHeight = targetImage.getHeight() / rows;
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                BufferedImage newChunk = new BufferedImage(chunkWidth, chunkHeight, targetImage.getType());
-                drawPieceImage(newChunk, chunkWidth, chunkHeight, i, j); // TODO Remove if image is not shown.
-                pieces.add(newChunk);
-            }
-        }
-    }
-
-    private void drawPieceImage(BufferedImage img, int chunkWidth, int chunkHeight, int x, int y) {
-        Graphics2D gr = img.createGraphics();
-        gr.drawImage(targetImage, 0, 0,
-                chunkWidth, chunkHeight,
-                chunkWidth * y, chunkHeight * x,
-                chunkWidth * y + chunkWidth, chunkHeight * x + chunkHeight,
-                null);
-        gr.dispose();
     }
 
 }
