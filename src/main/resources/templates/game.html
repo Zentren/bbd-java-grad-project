@@ -5,9 +5,15 @@
 <head>
     <title>Jigsaw</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script>
+    <script th:inline="javascript">
         "use strict";
+
+/*<![CDATA[*/
+        var sessionId = /*[[${id}]]*/ 'default';
+/*]]>*/
         var lastButton = null;
+
+        var image = null;
 
         function byId(e){return document.getElementById(e);}
         function newEl(tag){return document.createElement(tag);}
@@ -16,6 +22,14 @@
 
         function onDocLoaded()
         {
+            getImage(`../images/1`, function (blob) {
+                var imgUrl = window.URL.createObjectURL(blob);
+                var img = newEl('img');
+                img.src = imgUrl;
+                document.getElementById("tmp").appendChild(img);
+                image = img;
+            });
+
             byId('goBtn').addEventListener('click', onGoBtnClicked, false);
         }
 
@@ -25,18 +39,56 @@
                 lastButton = this;
             }
             else {
-                var tmp = this.innerHTML;
-                this.innerHTML = lastButton.innerHTML
-                lastButton.innerHTML = tmp
+
+                var pattern = /\s*?\(\s*?([0-9]+)\s*?,\s*?([0-9]+)\s*?\)\s*?/;
+
+                var res1 = lastButton.id.match(pattern);
+                var res2 = this.id.match(pattern);
+
+                var move = {
+                    x1: res1[1],
+                    y1: res1[2],
+                    x2: res2[1],
+                    y2: res2[2]
+                };
+
                 lastButton = null;
+                post(move, `http://localhost:8080/session/${sessionId}`, function() {
+                    onGoBtnClicked();
+                });
             }
         }
 
-        function onGoBtnClicked(evt)
-        {
+        function getJSON(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                var status = xhr.status;
+                if (status === 200) {
+                    callback(null, xhr.response);
+                } else {
+                    callback(status, xhr.response);
+                }
+            };
+            xhr.send();
+        }
+
+        function buildBoard(gamestate) {
             byId('tblTgt').innerHTML = '';
-            var nCols = byId('inputX').value;
-            var nRows = byId('inputY').value;
+            //var nCols = byId('inputX').value;
+            //var nRows = byId('inputY').value;
+
+            console.log(gamestate.complete);
+
+            var nCols = gamestate.board.columns;
+            var nRows = gamestate.board.rows;
+
+            var cellWidth = image.width / nCols;
+            var cellHeight = image.height / nRows;
+
+            console.log(cellWidth);
+            console.log(cellHeight);
 
             var tbl, curRow, curCell;
             tbl = newEl('table');
@@ -49,22 +101,65 @@
                 for (x=0; x<nCols; x++)
                 {
                     curCell = newEl('td');
+                    curCell.id = "(" + gamestate.board.grid[y][x].row + ", " + gamestate.board.grid[y][x].column + ")";
                     curCell.addEventListener('click', onCellClicked, false);
-                    curCell.innerText = "[" + x + "," + y + "]";
+
+                    var canvas = newEl("canvas");
+                    canvas.width = cellWidth;
+                    canvas.height = cellHeight;
+                    curCell.appendChild(canvas);
+                    var context = canvas.getContext("2d");
+                    context.drawImage(image, gamestate.board.grid[y][x].initialColumn * cellWidth, gamestate.board.grid[y][x].initialRow * cellHeight, cellWidth, cellHeight, 0, 0, cellWidth, cellHeight);
+
+                    //curCell.innerText = "(" + gamestate.board.grid[y][x].initialRow + ", " + gamestate.board.grid[y][x].initialColumn + ")";
                     curRow.appendChild(curCell);
                 }
             }
             byId('tblTgt').appendChild(tbl);
         }
+
+        function onGoBtnClicked(evt)
+        {
+            getJSON(`../session/${sessionId}`, // FIXME! Origin
+            function(err, gamestate) {
+              if (err !== null) {
+                alert('Something went wrong: ' + err);
+              } else {
+                buildBoard(gamestate);
+              }
+            });
+        };
+
+        function post(obj, url, onComplete) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.onreadystatechange = onComplete;
+            var data = JSON.stringify(obj);
+            xhr.send(data);
+        }
+
+        function getImage(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+
+            xhr.onload = function(e) {
+              if (this.status == 200) {
+                    callback(this.response);
+                }
+            };
+            xhr.send();
+        }
     </script>
 </head>
 <body>
-    <img th:src="@{'/images/' + ${id}}"/>
     <h1>Jigsaw</h1>
-    nCols:<input type="text" name="enter" class="enter" value="" id="inputX"/><br>
-    nRows:<input type="text" name="enter" class="enter" value="" id="inputY"/><br>
+    <!--nCols:<input type="text" name="enter" class="enter" value="" id="inputX"/><br>-->
+    <!--nRows:<input type="text" name="enter" class="enter" value="" id="inputY"/><br>-->
     <button id='goBtn'>click</button>
     <hr>
+    <div id='tmp'></div>
     <div id='tblTgt'></div>
 </body>
 </html>

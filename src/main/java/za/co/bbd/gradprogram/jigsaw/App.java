@@ -1,5 +1,6 @@
 package za.co.bbd.gradprogram.jigsaw;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class App {
 	@Autowired
 	TargetImageJdbcRepository repository;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         SpringApplication.run(App.class, args);
     }
 }

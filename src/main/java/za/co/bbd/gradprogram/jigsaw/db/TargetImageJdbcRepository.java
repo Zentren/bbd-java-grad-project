@@ -45,7 +45,7 @@ public class TargetImageJdbcRepository {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
                     .prepareStatement("insert into targetImage (image) " + "values(?)", new String[] {"id"});
-            ps.setBytes(1, new byte[] {});
+            ps.setBytes(1, targetImage.getImage());
             return ps;
         }, keyHolder);
         return (long) keyHolder.getKey();

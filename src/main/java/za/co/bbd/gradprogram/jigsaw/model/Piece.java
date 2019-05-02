@@ -1,8 +1,10 @@
 package za.co.bbd.gradprogram.jigsaw.model;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Piece {
 
     private final int row;
