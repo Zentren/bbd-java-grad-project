@@ -1,19 +1,23 @@
 package za.co.bbd.gradprogram.jigsaw.model;
 
 import lombok.Data;
+import java.awt.image.BufferedImage;
 
 @Data
 public class Piece {
-    private final int row;
-    private final int column;
+    private final int initialRow;
+    private final int initialColumn;
+    private final String name;
 
-    public boolean inRightPlace(int row, int col) {
-        return ((this.row == row)&&(this.column == col));
+    public Piece (int row, int column, BufferedImage image) {
+        this.initialRow = row;
+        this.initialColumn = column;
+        this.image = image;
+        this.name = String.valueOf(this.initialRow) + String.valueOf(this.initialColumn);
     }
 
-    //TODO: Change to bit stream or whatever
-    public String tileFace() {
-        return String.valueOf(this.row) + String.valueOf(this.column);
+    public boolean inRightPlace(int row, int col) {
+        return ((this.initialRow == row)&&(this.initialColumn == col));
     }
 
     @Override
@@ -25,6 +29,6 @@ public class Piece {
             return false;
         }
         Piece piece = (Piece)o;
-        return (piece.getRow() == this.row)&&(piece.getColumn() == this.column);
+        return (piece.getInitialRow() == this.initialRow)&&(piece.getInitialColumn() == this.initialColumn);
     }
 }

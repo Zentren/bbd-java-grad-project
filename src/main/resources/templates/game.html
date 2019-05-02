@@ -7,6 +7,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <h1>Jigsaw</h1>
+<h1>Jigsaw</h1>
+<table class="table table-hover">
+    <tbody>
+    <tr th:each="column : ${board.getBoard()}">
+        <th:block th:each="row : ${column}">
+            <td th:text="${row.getName()}">Dataset Field</td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
