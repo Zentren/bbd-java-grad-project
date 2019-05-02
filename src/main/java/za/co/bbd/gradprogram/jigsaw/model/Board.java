@@ -39,7 +39,7 @@ public class Board {
 
         for (int r = 0; r < this.rows; r++) {
             for (int c = 0; c < this.columns; c++) {
-                swap(r, c, rand.nextInt(this.rows), rand.nextInt(this.columns));
+                swap(board[r][c], board[rand.nextInt(this.rows)][rand.nextInt(this.columns)]);
             }
         }
     }
@@ -48,7 +48,7 @@ public class Board {
 
         for (int r = 0; r < this.rows; r++) {
             for (int c = 0; c < this.columns; c++) {
-                if (!(board[r][c]).inRightPlace(r,c))
+                if (!(board[r][c]).isCorrectlyPlaced())
                     return false;
             }
         }
@@ -56,10 +56,9 @@ public class Board {
         return true;
     }
 
-    public void swap(int row1, int col1, int row2, int col2) {
-        Piece temp = board[row1][col1];
-        board[row1][col1] = board[row2][col2];
-        board[row2][col2] = temp;
+    public void swap(Piece a, Piece b) {
+        board[a.getRow()][a.getColumn()] = new Piece(b, a.getRow(), a.getColumn());
+        board[b.getRow()][b.getColumn()] = new Piece(a, b.getRow(), b.getColumn());
     }
 
 }

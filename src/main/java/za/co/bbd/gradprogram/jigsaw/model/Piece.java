@@ -1,32 +1,33 @@
 package za.co.bbd.gradprogram.jigsaw.model;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class Piece {
+
+    private final int row;
+    private final int column;
     private final int initialRow;
     private final int initialColumn;
-    private final String name;
 
-    public Piece (int row, int column) {
+    public Piece(int row, int column) {
+        this.row = row;
+        this.column = column;
         this.initialRow = row;
         this.initialColumn = column;
-        this.name = String.valueOf(this.initialRow) + String.valueOf(this.initialColumn);
     }
 
-    public boolean inRightPlace(int row, int col) {
-        return ((this.initialRow == row)&&(this.initialColumn == col));
+    public Piece(Piece piece, int row, int column) {
+        this.row = row;
+        this.column = column;
+        this.initialRow = piece.initialRow;
+        this.initialColumn = piece.initialColumn;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
+    public boolean isCorrectlyPlaced() {
+        if (this.row == this.initialRow && this.column == this.initialColumn) {
             return true;
         }
-        if (!(o instanceof Piece)) {
-            return false;
-        }
-        Piece piece = (Piece)o;
-        return (piece.getInitialRow() == this.initialRow)&&(piece.getInitialColumn() == this.initialColumn);
+        return false;
     }
 }
