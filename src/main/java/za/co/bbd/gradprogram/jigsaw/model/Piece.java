@@ -4,16 +4,16 @@ import lombok.Data;
 
 @Data
 public class Piece {
-    private final int row;
-    private final int column;
+    private final int initialRow;
+    private final int initialColumn;
 
     public boolean inRightPlace(int row, int col) {
-        return ((this.row == row)&&(this.column == col));
+        return ((this.initialRow == row)&&(this.initialColumn == col));
     }
 
     //TODO: Change to bit stream or whatever
     public String tileFace() {
-        return String.valueOf(this.row) + String.valueOf(this.column);
+        return String.valueOf(this.initialRow) + String.valueOf(this.initialColumn);
     }
 
     @Override
@@ -25,6 +25,6 @@ public class Piece {
             return false;
         }
         Piece piece = (Piece)o;
-        return (piece.getRow() == this.row)&&(piece.getColumn() == this.column);
+        return (piece.getInitialRow() == this.initialRow)&&(piece.getInitialColumn() == this.initialColumn);
     }
 }

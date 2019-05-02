@@ -17,6 +17,10 @@ public class Board {
         initialize();
     }
 
+    public Piece getPiece(int row, int col) {
+        return board[row][col];
+    }
+
     private void initialize() {
         for (int r = 0; r < this.rows; r++) {
             for (int c = 0; c < this.columns; c++) {
