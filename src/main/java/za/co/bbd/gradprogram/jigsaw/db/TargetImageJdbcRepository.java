@@ -38,8 +38,8 @@ public class TargetImageJdbcRepository {
     }
 
     public int insert(TargetImage targetImage) {
-        return jdbcTemplate.update("insert into targetImage (id, image) " + "values(?, ?)",
-                new Object[]{targetImage.getId(), targetImage.getImage()});
+        return jdbcTemplate.update("insert into targetImage (image) " + "values(?)",
+                new Object[]{targetImage.getImage()});
     }
 
     public int update(TargetImage targetImage) {
